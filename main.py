@@ -1,3 +1,11 @@
+import pickle
+import re
+from collections import UserDict
+from colorama import Fore, Back, Style
+from datetime import datetime as dt
+from datetime import timedelta as tdelta
+
+
 def main():
 
     # Створення нової адресної книги або через відновлення
