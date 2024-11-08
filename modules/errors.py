@@ -1,5 +1,6 @@
 from modules import const
 
+
 class AlreadyExistsError(Exception):
     pass
 
@@ -12,22 +13,24 @@ def input_error(func):
             match func.__name__:
                 case "add_contact":
                     print(f"{const.COLOR_ERROR}Give me name and phone please")
-                case "change_contact":
+                case "card_edit":
                     print(
                         f"{const.COLOR_ERROR}Give me name, old and new phone for contact please"
                     )
-                case "phone":
+                case "card":
                     print(f"{const.COLOR_ERROR}Give me name to search")
                 case "add_birthday":
                     print(
-                        f"{const.COLOR_ERROR}Invalid date format for Birthday value, please use format: DD.MM.YYYY"
+                        f"{const.COLOR_ERROR}Invalid date format for Birthday value, please use format: YYYY-MM-DD"
                     )
                 case "show_birthday":
-                    print(f"{const.COLOR_ERROR}Give me name to search for a birthday data")
+                    print(
+                        f"{const.COLOR_ERROR}Give me name to search for a birthday data"
+                    )
 
         except KeyError:
             match func.__name__:
-                case "change_contact":
+                case "card_edit":
                     print(
                         f'{const.COLOR_ERROR}Contact WAS NOT found. Nothing to change. Use "add" command to create one'
                     )
