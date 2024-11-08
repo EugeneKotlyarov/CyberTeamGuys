@@ -14,8 +14,6 @@ from collections import UserDict
 from colorama import Style
 from datetime import datetime as dt
 from datetime import timedelta as tdelta
-from os import system, name
-from subprocess import call
 
 COMMANDS_MENU = f"""
 Assistant bot's commands menu:
