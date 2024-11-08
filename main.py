@@ -161,7 +161,8 @@ def load_data(filename="addressbook.pkl"):
 
 def clear():
     # check and make call for specific operating system
-    _ = call("clear" if name == "posix" else "cls")
+    #_ = call("clear" if name == "posix" else "cls")
+    os.system("cls" if platform.system() == "Windows" else "clear")
 
 
 def main():
