@@ -1,8 +1,7 @@
-from classes.exceptions import PhoneNumberDoesNotExist
+from classes.exceptions import PhoneNumberDoesNotExist, InvalidFormat
 
 import re
 from datetime import datetime as dt
-from datetime import timedelta as tdelta
 
 
 class Field:
@@ -20,11 +19,11 @@ class Name(Field):
 
 class Phone(Field):
     def __init__(self, phone):
-        pattern = re.compile(r"\d{10}")
+        pattern = re.compile(r"^\+?\d{10,15}$")
         if re.search(pattern, phone):
             super().__init__(phone)
         else:
-            raise PhoneNumberDoesNotExist
+            raise InvalidFormat
 
 
 class Birthday(Field):
@@ -33,9 +32,13 @@ class Birthday(Field):
             bd = dt.strptime(bday, "%Y-%m-%d").date()
             super().__init__(bd)
         except ValueError:
-            raise ValueError
+            raise InvalidFormat
 
 
 class Email(Field):
     def __init__(self, email: str):
-        super().__init__(email)
+        pattern = re.compile(r"^[\w\.-]+@[\w\.-]+\.\w+$")
+        if re.search(pattern, email):
+            super().__init__(email)
+        else:
+            raise InvalidFormat 

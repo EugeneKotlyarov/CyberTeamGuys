@@ -10,11 +10,8 @@ class Record:
         self.email = None
         self.birthday = None
 
-    def add_phone(self, phone):
-        try:
-            self.phones.append(Phone(phone))
-        except PhoneNumberDoesNotExist:
-            pass
+    def phone_add(self, phone):
+        self.phones.append(Phone(phone))
 
     def find_phone(self, phone):
         for p in self.phones:
@@ -32,7 +29,7 @@ class Record:
         for p in self.phones:
             p.value = new if p.value == old else p.value
 
-    def add_birthday(self, birthday):
+    def birthday_add(self, birthday):
         self.birthday = Birthday(birthday)
 
     def email_add(self, email):

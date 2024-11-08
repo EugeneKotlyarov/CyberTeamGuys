@@ -41,7 +41,7 @@ class AddressBook(UserDict):
     def delete(self, name):
         self.data.pop(name, None)
 
-    def get_upcoming_birthdays(self, days):
+    def get_upcoming_birthdays(self, days: int):
 
         notifications = []
 
@@ -61,14 +61,14 @@ class AddressBook(UserDict):
             # his original birth date
             # his birthday this year
             # day number of birthday in year
-            user_bd_original = record.birthday.value
+            user_bd_original = record.birthday
             user_bd_this_year = dt(
                 year=today_year, month=user_bd_original.month, day=user_bd_original.day
             ).date()
             user_bd_this_year_number = user_bd_this_year.timetuple().tm_yday
 
             # simple situation if birthday within a week from now
-            if 0 <= user_bd_this_year_number - today_number_in_year <= 7:
+            if 0 <= user_bd_this_year_number - today_number_in_year <= days:
 
                 congratulation_date = user_bd_this_year
 
@@ -86,7 +86,7 @@ class AddressBook(UserDict):
 
             # situation at the end of year and birthday on january begin
             elif (
-                ny_number_in_year - today_number_in_year + user_bd_this_year_number <= 7
+                ny_number_in_year - today_number_in_year + user_bd_this_year_number <= days
             ):
 
                 # congratulation_date must be set to next year

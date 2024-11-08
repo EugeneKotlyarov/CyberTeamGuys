@@ -1,20 +1,19 @@
+# local project import
+
 from modules import const
 from modules.errors import input_error
 
+from classes.record import Record
+from classes.addressbook import AddressBook
+
+# global import
+
 import pickle
-import re
-import sys
 import os
 import platform
 
 from colorama import Style
-from datetime import datetime as dt
-from datetime import timedelta as tdelta
-from prettytable import PrettyTable
 from subprocess import call
-
-from classes.record import Record
-from classes.addressbook import AddressBook
 
 COMMANDS_MENU = f"""
 Assistant bot's commands menu:
@@ -42,32 +41,7 @@ Assistant bot's commands menu:
 """
 
 
-# Validation for correct number made with own exception in class Phone
-#
-# all the classes has their methods with realisation and all works fine
-#
-# mainly prints copied from the task, added a couple other for better visualisation
-# of result
-# all
-#
-# class Birthday added with ValueError exception detection
-#
-# function ADD_BIRTHDAY added without checking for existing data, so each execution
-# for existing contact will update his birthday date, i think it's OK
-#
-# __str__ function for class Record now print info with birthday
-#
-# class AddressBook now has a GET_UPCOMING_BIRTHDAYS function adopted from HW-03-04
-# and re-mastered for classes structure.
-# Return list of dicts with keys: 'name' and 'congratulation_date'. Tested, working GOOD
-# BUT
-# it is too long, so it's a good idea to export it an external file in future
-#
-# errors checks fixed/ Changed from "return" to "print" directly
-# added realisation for save and load address book state with pickle
-#
-
-
+# ===== parse user input into command and parameters
 def parse_input(user_input):
     cmd, *args = user_input.split()
     cmd = cmd.strip().lower()
@@ -78,7 +52,7 @@ def parse_input(user_input):
 def card_add(args, book: AddressBook):
     name, phone, *_ = args
     record = Record(name)
-    record.add_phone(phone)
+    record.phone_add(phone)
     book.add_record(record)
 
 
@@ -86,7 +60,8 @@ def card_add(args, book: AddressBook):
 def card_add_phone(args, book: AddressBook):
     name, phone, *_ = args
     record = book.find(name)
-    record.add_phone(phone)
+    record.phone_add(phone)
+    print(f"{const.COLOR_DONE}Phone added")
 
 
 @input_error
@@ -119,29 +94,31 @@ def email_add(args, book: AddressBook):
     name, email, *_ = args
     record = book.find(name)
     record.email_add(email)
+    print(f"{const.COLOR_DONE}E-mail added")
 
 
 @input_error
-def add_birthday(args, book: AddressBook):
+def birthday_add(args, book: AddressBook):
     name, birthday, *_ = args
     record = book.find(name)
-    record.add_birthday(birthday)
+    record.birthday_add(birthday)
+    print(f"{const.COLOR_DONE}Birthday added")
 
 
 @input_error
-def show_birthday(args, book: AddressBook):
+def birthday_show(args, book: AddressBook):
     name, *_ = args
     record = book.find(name)
     if record.birthday == None:
-        print(f"{name}'s birthday date does not set")
+        print(f"{const.COLOR_ERROR}{name}'s birthday date does not set")
     else:
-        print(f"{name}'s birthday is {record.birthday}")
+        print(f"{const.COLOR_DONE}{name}'s birthday is {record.birthday}")
 
 
 @input_error
-def birthdays(args, book: AddressBook):
+def birthday_in(args, book: AddressBook):
     days, *_ = args
-    for r in book.get_upcoming_birthdays(days):
+    for r in book.get_upcoming_birthdays(int(days)):
         print(f"{const.COLOR_DONE}{r["name"]} = {r["congratulation_date"]}")
 
 
@@ -173,7 +150,7 @@ def main():
     print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
 
     while True:
-        user_input = input(f"{const.COLOR_MENU}Enter a command: ")
+        user_input = input(f"{const.COLOR_MENU}Enter a command ('menu' for menu): ")
         command, *args = parse_input(user_input)
         clear()
 
@@ -212,15 +189,15 @@ def main():
 
         elif command == "birthday-add":
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
-            add_birthday(args, book)
+            birthday_add(args, book)
 
         elif command == "birthday-show":
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
-            show_birthday(args, book)
+            birthday_show(args, book)
 
-        elif command == "birthdays-in":
+        elif command == "birthday-in":
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
-            birthdays(book)
+            birthday_in(args, book)
 
         elif command == "note-add":
             pass
@@ -233,6 +210,9 @@ def main():
 
         elif command == "note-delete":
             pass
+
+        elif command == "menu":
+            print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
 
         else:
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")

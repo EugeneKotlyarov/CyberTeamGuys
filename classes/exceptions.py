@@ -4,3 +4,7 @@ class PhoneNumberDoesNotExist(Exception):
 
 class AlreadyExistsError(Exception):
     pass
+
+
+class InvalidFormat(Exception):
+    pass
