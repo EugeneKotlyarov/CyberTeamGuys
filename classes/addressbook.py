@@ -1,17 +1,14 @@
+from record import Record
+
+# from modules.errors import input_error
+# from modules import const
+
+
 from collections import UserDict
-
-from classes.record import Record
-from modules import const
-from modules.errors import input_error
-
-from prettytable import PrettyTable
-
-
 from colorama import Style
 from datetime import datetime as dt
 from datetime import timedelta as tdelta
-from os import system, name
-from subprocess import call
+from prettytable import PrettyTable
 
 
 class AddressBook(UserDict):

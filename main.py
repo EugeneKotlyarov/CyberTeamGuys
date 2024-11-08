@@ -1,21 +1,19 @@
-from classes.fields import Name, Phone, Birthday, Email
-from classes.record import Record
-from classes.addressbook import AddressBook
-
 from modules import const
 from modules.errors import input_error
 
 import pickle
-from prettytable import PrettyTable
 import re
 import sys
-
 
 from colorama import Style
 from datetime import datetime as dt
 from datetime import timedelta as tdelta
 from os import system, name
+from prettytable import PrettyTable
 from subprocess import call
+
+from classes.fields import Name, Phone, Birthday, Email
+from classes.addressbook import AddressBook
 
 COMMANDS_MENU = f"""
 Assistant bot's commands menu:

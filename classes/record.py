@@ -1,4 +1,7 @@
-from classes.exceptions import PhoneNumberDoesNotExist
+from exceptions import PhoneNumberDoesNotExist
+
+from fields import Name, Phone, Birthday, Email
+
 
 class Record:
     def __init__(self, name):
