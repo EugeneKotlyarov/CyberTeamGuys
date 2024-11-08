@@ -1,7 +1,11 @@
-from record import Record
+from classes.record import Record
 
-# from modules.errors import input_error
-# from modules import const
+from modules.errors import input_error
+from modules import const
+
+
+from modules.errors import input_error
+from modules import const
 
 
 from collections import UserDict
@@ -21,11 +25,13 @@ class AddressBook(UserDict):
 
     def all(self):
         print(
-            f"{const.COLOR_BOOK}Full address book [numbers in base: {len(self.data)}]:"
+            f"{const.COLOR_BOOK}Full address book [numbers in base: {len(self.data)}]"
         )
         table = PrettyTable()
         table.field_names = ["Name", "Phone(s)", "birthday", "e-mail"]
+        print_data = {}
         for i in self.data.values():
+            print_data.update()
             table.add_row(
                 [i.name, "\n".join(j.value for j in i.phones), i.birthday, i.email],
                 divider=True,

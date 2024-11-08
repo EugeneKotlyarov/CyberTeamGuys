@@ -12,7 +12,7 @@ from os import system, name
 from prettytable import PrettyTable
 from subprocess import call
 
-from classes.fields import Name, Phone, Birthday, Email
+from classes.record import Record
 from classes.addressbook import AddressBook
 
 COMMANDS_MENU = f"""
@@ -152,8 +152,10 @@ def save_data(book: AddressBook, filename="addressbook.pkl"):
 def load_data(filename="addressbook.pkl"):
     try:
         with open(filename, "rb") as f:
+            print(f"{const.COLOR_DONE}Local address book was found and loaded")
             return pickle.load(f)
     except FileNotFoundError:
+        print(f"{const.COLOR_ERROR}Local address book was NOT found. Empty createdex")
         return AddressBook()
 
 

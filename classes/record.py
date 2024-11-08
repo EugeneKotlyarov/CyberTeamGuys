@@ -1,6 +1,6 @@
-from exceptions import PhoneNumberDoesNotExist
+from classes.exceptions import PhoneNumberDoesNotExist
 
-from fields import Name, Phone, Birthday, Email
+from classes.fields import Name, Phone, Birthday, Email
 
 
 class Record:
