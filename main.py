@@ -4,11 +4,12 @@ from modules.errors import input_error
 import pickle
 import re
 import sys
+import os
+import platform
 
 from colorama import Style
 from datetime import datetime as dt
 from datetime import timedelta as tdelta
-from os import system, name
 from prettytable import PrettyTable
 from subprocess import call
 
@@ -161,7 +162,7 @@ def load_data(filename="addressbook.pkl"):
 
 def clear():
     # check and make call for specific operating system
-    #_ = call("clear" if name == "posix" else "cls")
+    # _ = call("clear" if name == "posix" else "cls")
     os.system("cls" if platform.system() == "Windows" else "clear")
 
 
