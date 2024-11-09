@@ -15,6 +15,10 @@ import platform
 from colorama import Style
 from subprocess import call
 
+from classes.record import Record
+from classes.addressbook import AddressBook
+from classes.notebook import NoteBook
+
 COMMANDS_MENU = f"""
 Assistant bot's commands menu:
 - contact -
@@ -32,7 +36,7 @@ Assistant bot's commands menu:
  birthday-show <name>\t\t\t# show contact's birthday
  birthday-in <N>\t\t\t# show birthdays next N days
 - notes -
- note-add <text_note>\t\t\t# add note
+ note-add <text_note #teg>\t\t\t# add note
  note-show-all\t\t\t\t# show all notes
  note-edit <id>\t\t\t\t# edit note by id
  note-delete <id>\t\t\t# delete note by id
@@ -121,11 +125,32 @@ def birthday_in(args, book: AddressBook):
     for r in book.get_upcoming_birthdays(int(days)):
         print(f"{const.COLOR_DONE}{r["name"]} = {r["congratulation_date"]}")
 
+@input_error
+def add_note(args, notebook: NoteBook):
+    text_note = " ".join(args)
+    print(notebook.add_note(text_note))
+
+@input_error
+def note_delete(args, notebook: NoteBook):
+    note_id, *_ = args
+    print(notebook.delete_note(note_id))
+
+@input_error
+def note_edit(args, notebook: NoteBook):
+    note_id = args[0]
+    new_text = " ".join(args[1:])
+    print(notebook.edit_note(note_id, new_text))
+
+def note_show_all(notebook: NoteBook):
+    print(notebook.show_all_notes())
 
 def save_data(book: AddressBook, filename="addressbook.pkl"):
     with open(filename, "wb") as f:
         pickle.dump(book, f)
 
+def save_data_note(notebook: NoteBook, filename="notebook.pkl"):
+    with open(filename, "wb") as f:
+        pickle.dump(notebook, f)
 
 def load_data(filename="addressbook.pkl"):
     try:
@@ -135,6 +160,25 @@ def load_data(filename="addressbook.pkl"):
     except FileNotFoundError:
         print(f"{const.COLOR_ERROR}Local address book was NOT found. Empty createdex")
         return AddressBook()
+    
+def load_data_note(filename="notebook.pkl"):
+    try:
+        with open(filename, "rb") as f:
+            print(f"{const.COLOR_DONE}Local note book was found and loaded")
+            return pickle.load(f)
+    except FileNotFoundError:
+        print(f"{const.COLOR_ERROR}Local note book was NOT found. Empty createdex")
+        return NoteBook()
+
+
+def load_data_note(filename="notebook.pkl"):
+    try:
+        with open(filename, "rb") as f:
+            print(f"{const.COLOR_DONE}Local note book was found and loaded")
+            return pickle.load(f)
+    except FileNotFoundError:
+        print(f"{const.COLOR_ERROR}Local note book was NOT found. Empty createdex")
+        return NoteBook()
 
 
 def clear():
@@ -147,6 +191,8 @@ def main():
     clear()
     # Створення нової адресної книги або через відновлення
     book = load_data()
+    # Створення нового записника або через відновлення
+    notebook = load_data_note()
     print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
 
     while True:
@@ -157,6 +203,7 @@ def main():
         if command in ["close", "exit"]:
             print(f"{const.COLOR_DONE}\nGood bye!")
             save_data(book)
+            save_data_note(notebook)
             break
 
         elif command == "card-add":
@@ -200,19 +247,20 @@ def main():
             birthday_in(args, book)
 
         elif command == "note-add":
-            pass
+            print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
+            add_note(args, notebook)
 
         elif command == "note-show-all":
-            pass
+            print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
+            note_show_all(notebook)
 
         elif command == "note-edit":
-            pass
+            print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
+            note_edit(args, notebook)
 
         elif command == "note-delete":
-            pass
-
-        elif command == "menu":
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
+            note_delete(args, notebook)
 
         else:
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
