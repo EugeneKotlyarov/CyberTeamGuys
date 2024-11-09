@@ -145,20 +145,24 @@ def note_edit(args, notebook: NoteBook):
     print(notebook.edit_note(note_id, new_text))
 
 
+@input_error
 def note_show_all(notebook: NoteBook):
     print(notebook.show_all_notes())
 
 
+@input_error
 def save_data(book: AddressBook, filename="addressbook.pkl"):
     with open(filename, "wb") as f:
         pickle.dump(book, f)
 
 
+@input_error
 def save_data_note(notebook: NoteBook, filename="notebook.pkl"):
     with open(filename, "wb") as f:
         pickle.dump(notebook, f)
 
 
+@input_error
 def load_data(filename="addressbook.pkl"):
     try:
         with open(filename, "rb") as f:
@@ -169,6 +173,7 @@ def load_data(filename="addressbook.pkl"):
         return AddressBook()
 
 
+@input_error
 def load_data_note(filename="notebook.pkl"):
     try:
         with open(filename, "rb") as f:
@@ -179,6 +184,7 @@ def load_data_note(filename="notebook.pkl"):
         return NoteBook()
 
 
+@input_error
 def load_data_note(filename="notebook.pkl"):
     try:
         with open(filename, "rb") as f:
