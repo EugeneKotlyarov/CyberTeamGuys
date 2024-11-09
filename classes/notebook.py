@@ -26,22 +26,16 @@ class NoteBook(UserDict):
         return note_id
 
     def delete_note(self, note_id):
-        # if note_id in self.data:
         try:
             del self.data[note_id]
-            # return f"Note with ID {note_id} deleted"
         except KeyError:
             raise KeyError
-        # return "Note not found"
 
     def edit_note(self, note_id, new_text):
-        # if note_id in self.data:
         try:
             self.data[note_id].edit(new_text)
         except KeyError:
             raise KeyError
-            # return f"Note with ID {note_id} updated."
-        # return "Note not found."
 
     def show_all_notes(self):
         if not self.data:
