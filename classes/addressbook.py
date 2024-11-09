@@ -48,7 +48,7 @@ class AddressBook(UserDict):
                 f"{const.COLOR_ERROR}Enter rational days number, between 1 and 31, otherwise it doesn't make sence"
             )
             return None
-        
+
         notifications = []
 
         # get today values: date, year, number of the current day in year and total days is year
@@ -70,7 +70,9 @@ class AddressBook(UserDict):
             if record.birthday:
                 user_bd_original = record.birthday.value
                 user_bd_this_year = dt(
-                    year=today_year, month=user_bd_original.month, day=user_bd_original.day
+                    year=today_year,
+                    month=user_bd_original.month,
+                    day=user_bd_original.day,
                 ).date()
                 user_bd_this_year_number = user_bd_this_year.timetuple().tm_yday
 
@@ -81,7 +83,9 @@ class AddressBook(UserDict):
 
                     # weekend days check and move date to monday if true
                     if congratulation_date.isoweekday() >= 6:
-                        congratulation_date += tdelta(8 - congratulation_date.isoweekday())
+                        congratulation_date += tdelta(
+                            8 - congratulation_date.isoweekday()
+                        )
 
                     # create and append dict to result list
                     user_to_congratulate = {}
@@ -93,7 +97,8 @@ class AddressBook(UserDict):
 
                 # situation at the end of year and birthday on january begin
                 elif (
-                    ny_number_in_year - today_number_in_year + user_bd_this_year_number <= days
+                    ny_number_in_year - today_number_in_year + user_bd_this_year_number
+                    <= days
                 ):
 
                     # congratulation_date must be set to next year
@@ -105,7 +110,9 @@ class AddressBook(UserDict):
 
                     # weekend days check and move date to monday if true
                     if congratulation_date.isoweekday() >= 6:
-                        congratulation_date += tdelta(8 - congratulation_date.isoweekday())
+                        congratulation_date += tdelta(
+                            8 - congratulation_date.isoweekday()
+                        )
 
                     # create and append dict to result list
                     user_to_congratulate = {}
@@ -129,4 +136,3 @@ class AddressBook(UserDict):
                     divider=True,
                 )
             print(table)
-

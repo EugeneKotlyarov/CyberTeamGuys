@@ -41,4 +41,4 @@ class Email(Field):
         if re.search(pattern, email):
             super().__init__(email)
         else:
-            raise InvalidFormat 
+            raise InvalidFormat

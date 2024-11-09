@@ -40,10 +40,8 @@ class NoteBook(UserDict):
     def show_all_notes(self):
         if not self.data:
             print(f"{const.COLOR_ERROR}No notes found")
-        
-        print(
-            f"{const.COLOR_BOOK}Full note book [numbers in base: {len(self.data)}]"
-        )
+
+        print(f"{const.COLOR_BOOK}Full note book [numbers in base: {len(self.data)}]")
         table = PrettyTable()
         table.field_names = ["ID", "Note Text", "Tag"]
 

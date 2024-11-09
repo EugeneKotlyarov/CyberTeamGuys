@@ -25,10 +25,7 @@ def input_error(func):
                         f"{const.COLOR_ERROR}Give me name to search for a birthday data"
                     )
                 case "birthday_in":
-                    print(
-                        f"{const.COLOR_ERROR}Please, specify days number as integer"
-                    )
-
+                    print(f"{const.COLOR_ERROR}Please, specify days number as integer")
 
         except KeyError:
             match func.__name__:
@@ -45,12 +42,10 @@ def input_error(func):
                 case "note_edit":
                     print(f"{const.COLOR_ERROR}Note was not found")
 
-
         except AttributeError:
             match func.__name__:
                 case "birthday_in":
                     print(f"{const.COLOR_ERROR}No one record has a birthday value")
-
 
         except AlreadyExistsError:
             print(
