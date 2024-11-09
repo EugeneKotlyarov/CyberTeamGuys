@@ -1,9 +1,4 @@
-class PhoneNumberDoesNotExist(Exception):
-    pass
-
-
-class AlreadyExistsError(Exception):
-    pass
+# added personal exception InvalidFormat
 
 
 class InvalidFormat(Exception):

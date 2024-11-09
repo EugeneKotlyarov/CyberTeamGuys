@@ -3,16 +3,19 @@ from classes.record import Record
 from modules.errors import input_error
 from modules import const
 
-
-from modules.errors import input_error
-from modules import const
-
-
 from collections import UserDict
 from colorama import Style
 from datetime import datetime as dt
 from datetime import timedelta as tdelta
 from prettytable import PrettyTable
+
+
+# basic ADDRESSBOOK class with
+# function ADD_RECORD for adding contact card in a BOOK
+# function FIND to search contact card by its name in a BOOK
+# function ALL simply prints BOOK
+# function DELETE deletes contact from book
+# function GET_UPCOMING_BIRTHDAYS prints table for congratulations
 
 
 class AddressBook(UserDict):

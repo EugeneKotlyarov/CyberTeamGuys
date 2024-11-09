@@ -4,6 +4,12 @@ from collections import UserDict
 from classes.note import Note
 from prettytable import PrettyTable
 
+# basic NOTE BOOK class with
+# function ADD_NOTE for adding note in a BOOK
+# function DELETE deletes note from book by its ID
+# function EDIT_NOTE edits note text by its ID
+# function SHOW_ALL_NOTES simply prints BOOK
+
 
 class NoteBook(UserDict):
     def __init__(self):

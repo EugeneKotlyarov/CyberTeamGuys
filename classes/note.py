@@ -1,6 +1,9 @@
 from typing import Optional, List, Dict
 
 
+# class NOTE for a single record in note book
+
+
 class Note:
     id: int
     text: str

@@ -2,8 +2,9 @@ from modules import const
 from classes.exceptions import InvalidFormat
 
 
-class AlreadyExistsError(Exception):
-    pass
+# this is a DECORATOR
+# here is just an exceptions for using in MAIN function
+# all ERROR cases in this module
 
 
 def input_error(func):
@@ -46,11 +47,6 @@ def input_error(func):
             match func.__name__:
                 case "birthday_in":
                     print(f"{const.COLOR_ERROR}No one record has a birthday value")
-
-        except AlreadyExistsError:
-            print(
-                f'{const.COLOR_ERROR}Contact WAS NOT added. Already exists. Please use "change" command for edit'
-            )
 
         except InvalidFormat:
             match func.__name__:

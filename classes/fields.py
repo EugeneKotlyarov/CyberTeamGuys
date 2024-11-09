@@ -1,7 +1,12 @@
-from classes.exceptions import PhoneNumberDoesNotExist, InvalidFormat
+from classes.exceptions import InvalidFormat
 
 import re
 from datetime import datetime as dt
+
+
+# basic sctructure for contact card in a BOOK:
+# NAME, PHONE, BIRTHDAY, EMAIL all type FIELD
+# added phone and email validation check
 
 
 class Field:

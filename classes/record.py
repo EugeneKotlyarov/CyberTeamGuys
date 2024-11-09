@@ -1,6 +1,8 @@
-from classes.exceptions import PhoneNumberDoesNotExist
-
 from classes.fields import Name, Phone, Birthday, Email
+
+
+# class RECORD for a single record in address book
+# with basic functions ADD, FIND, EDIT etc for editing contact card
 
 
 class Record:
