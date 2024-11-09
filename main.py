@@ -52,6 +52,9 @@ def parse_input(user_input):
     return cmd, *args
 
 
+# ===== BLOCK FOR CALLING FUNCTIONS FROM MAIN ===== START
+
+
 @input_error
 def card_add(args, book: AddressBook):
     name, phone, *_ = args
@@ -153,6 +156,11 @@ def note_show_all(notebook: NoteBook):
     notebook.show_all_notes()
 
 
+# ===== BLOCK FOR CALLING FUNCTIONS FROM MAIN ===== END
+
+# ===== BLOCK FOR SAVE AND RESTORE DATA ===== START
+
+
 @input_error
 def save_data(book: AddressBook, filename="addressbook.pkl"):
     with open(filename, "wb") as f:
@@ -187,11 +195,15 @@ def load_data_note(filename="notebook.pkl"):
         return NoteBook()
 
 
+# ===== BLOCK FOR SAVE AND RESTORE DATA ===== END
+
+
+# check and make call for specific operating system
 def clear():
-    # check and make call for specific operating system
     os.system("cls" if platform.system() == "Windows" else "clear")
 
 
+# ===== MAIN ===== START
 def main():
     clear()
     # Створення нової адресної книги або через відновлення
@@ -271,6 +283,10 @@ def main():
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
             print(f"{const.COLOR_ERROR}Invalid command")
 
+
+# ===== MAIN ===== END
+
+# ===== ENTRANCE POINT =====
 
 if __name__ == "__main__":
     main()
