@@ -43,6 +43,12 @@ class AddressBook(UserDict):
 
     def get_upcoming_birthdays(self, days: int):
 
+        if days < 0 or days > 31:
+            print(
+                f"{const.COLOR_ERROR}Enter rational days number, between 1 and 31, otherwise it doesn't make sence"
+            )
+            return None
+        
         notifications = []
 
         # get today values: date, year, number of the current day in year and total days is year
@@ -61,51 +67,66 @@ class AddressBook(UserDict):
             # his original birth date
             # his birthday this year
             # day number of birthday in year
-            user_bd_original = record.birthday
-            user_bd_this_year = dt(
-                year=today_year, month=user_bd_original.month, day=user_bd_original.day
-            ).date()
-            user_bd_this_year_number = user_bd_this_year.timetuple().tm_yday
+            if record.birthday:
+                user_bd_original = record.birthday.value
+                user_bd_this_year = dt(
+                    year=today_year, month=user_bd_original.month, day=user_bd_original.day
+                ).date()
+                user_bd_this_year_number = user_bd_this_year.timetuple().tm_yday
 
-            # simple situation if birthday within a week from now
-            if 0 <= user_bd_this_year_number - today_number_in_year <= days:
+                # simple situation if birthday within a week from now
+                if 0 <= user_bd_this_year_number - today_number_in_year <= days:
 
-                congratulation_date = user_bd_this_year
+                    congratulation_date = user_bd_this_year
 
-                # weekend days check and move date to monday if true
-                if congratulation_date.isoweekday() >= 6:
-                    congratulation_date += tdelta(8 - congratulation_date.isoweekday())
+                    # weekend days check and move date to monday if true
+                    if congratulation_date.isoweekday() >= 6:
+                        congratulation_date += tdelta(8 - congratulation_date.isoweekday())
 
-                # create and append dict to result list
-                user_to_congratulate = {}
-                user_to_congratulate["name"] = name
-                user_to_congratulate["congratulation_date"] = (
-                    congratulation_date.strftime("%d.%m.%Y")
+                    # create and append dict to result list
+                    user_to_congratulate = {}
+                    user_to_congratulate["name"] = name
+                    user_to_congratulate["congratulation_date"] = (
+                        congratulation_date.strftime("%d.%m.%Y")
+                    )
+                    notifications.append(user_to_congratulate)
+
+                # situation at the end of year and birthday on january begin
+                elif (
+                    ny_number_in_year - today_number_in_year + user_bd_this_year_number <= days
+                ):
+
+                    # congratulation_date must be set to next year
+                    congratulation_date = dt(
+                        year=today_year + 1,
+                        month=user_bd_original.month,
+                        day=user_bd_original.day,
+                    )
+
+                    # weekend days check and move date to monday if true
+                    if congratulation_date.isoweekday() >= 6:
+                        congratulation_date += tdelta(8 - congratulation_date.isoweekday())
+
+                    # create and append dict to result list
+                    user_to_congratulate = {}
+                    user_to_congratulate["name"] = name
+                    user_to_congratulate["congratulation_date"] = (
+                        congratulation_date.strftime("%d.%m.%Y")
+                    )
+                    notifications.append(user_to_congratulate)
+
+        if notifications:
+            print(
+                f"{const.COLOR_BOOK}In next {days} days, such people has their birthdays:"
+            )
+            table = PrettyTable()
+            table.field_names = ["Name", "Congratulation Date"]
+            print_data = {}
+            for i in notifications:
+                print_data.update()
+                table.add_row(
+                    [i["name"], i["congratulation_date"]],
+                    divider=True,
                 )
-                notifications.append(user_to_congratulate)
+            print(table)
 
-            # situation at the end of year and birthday on january begin
-            elif (
-                ny_number_in_year - today_number_in_year + user_bd_this_year_number <= days
-            ):
-
-                # congratulation_date must be set to next year
-                congratulation_date = dt(
-                    year=today_year + 1,
-                    month=user_bd_original.month,
-                    day=user_bd_original.day,
-                )
-
-                # weekend days check and move date to monday if true
-                if congratulation_date.isoweekday() >= 6:
-                    congratulation_date += tdelta(8 - congratulation_date.isoweekday())
-
-                # create and append dict to result list
-                user_to_congratulate = {}
-                user_to_congratulate["name"] = name
-                user_to_congratulate["congratulation_date"] = (
-                    congratulation_date.strftime("%d.%m.%Y")
-                )
-                notifications.append(user_to_congratulate)
-
-        return notifications

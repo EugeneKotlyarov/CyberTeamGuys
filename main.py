@@ -124,8 +124,7 @@ def birthday_show(args, book: AddressBook):
 @input_error
 def birthday_in(args, book: AddressBook):
     days, *_ = args
-    for r in book.get_upcoming_birthdays(int(days)):
-        print(f"{const.COLOR_DONE}{r["name"]} = {r["congratulation_date"]}")
+    book.get_upcoming_birthdays(int(days))
 
 
 @input_error
@@ -190,7 +189,6 @@ def load_data_note(filename="notebook.pkl"):
 
 def clear():
     # check and make call for specific operating system
-    # _ = call("clear" if name == "posix" else "cls")
     os.system("cls" if platform.system() == "Windows" else "clear")
 
 
