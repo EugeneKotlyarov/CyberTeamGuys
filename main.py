@@ -125,15 +125,18 @@ def birthday_in(args, book: AddressBook):
     for r in book.get_upcoming_birthdays(int(days)):
         print(f"{const.COLOR_DONE}{r["name"]} = {r["congratulation_date"]}")
 
+
 @input_error
 def add_note(args, notebook: NoteBook):
     text_note = " ".join(args)
     print(notebook.add_note(text_note))
 
+
 @input_error
 def note_delete(args, notebook: NoteBook):
     note_id, *_ = args
     print(notebook.delete_note(note_id))
+
 
 @input_error
 def note_edit(args, notebook: NoteBook):
@@ -141,16 +144,20 @@ def note_edit(args, notebook: NoteBook):
     new_text = " ".join(args[1:])
     print(notebook.edit_note(note_id, new_text))
 
+
 def note_show_all(notebook: NoteBook):
     print(notebook.show_all_notes())
+
 
 def save_data(book: AddressBook, filename="addressbook.pkl"):
     with open(filename, "wb") as f:
         pickle.dump(book, f)
 
+
 def save_data_note(notebook: NoteBook, filename="notebook.pkl"):
     with open(filename, "wb") as f:
         pickle.dump(notebook, f)
+
 
 def load_data(filename="addressbook.pkl"):
     try:
@@ -158,16 +165,17 @@ def load_data(filename="addressbook.pkl"):
             print(f"{const.COLOR_DONE}Local address book was found and loaded")
             return pickle.load(f)
     except FileNotFoundError:
-        print(f"{const.COLOR_ERROR}Local address book was NOT found. Empty createdex")
+        print(f"{const.COLOR_ERROR}Local address book was NOT found. Empty created")
         return AddressBook()
-    
+
+
 def load_data_note(filename="notebook.pkl"):
     try:
         with open(filename, "rb") as f:
             print(f"{const.COLOR_DONE}Local note book was found and loaded")
             return pickle.load(f)
     except FileNotFoundError:
-        print(f"{const.COLOR_ERROR}Local note book was NOT found. Empty createdex")
+        print(f"{const.COLOR_ERROR}Local note book was NOT found. Empty created")
         return NoteBook()
 
 
@@ -177,7 +185,7 @@ def load_data_note(filename="notebook.pkl"):
             print(f"{const.COLOR_DONE}Local note book was found and loaded")
             return pickle.load(f)
     except FileNotFoundError:
-        print(f"{const.COLOR_ERROR}Local note book was NOT found. Empty createdex")
+        print(f"{const.COLOR_ERROR}Local note book was NOT found. Empty created")
         return NoteBook()
 
 
