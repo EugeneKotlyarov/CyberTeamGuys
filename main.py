@@ -36,9 +36,9 @@ Assistant bot's commands menu:
  birthday-show <name>\t\t\t# show contact's birthday
  birthday-in <N>\t\t\t# show birthdays next N days
 - notes -
- note-add <text_note #teg>\t\t\t# add note
+ note-add\t\t\t\t# add note step-by-step
  note-show-all\t\t\t\t# show all notes
- note-edit <id>\t\t\t\t# edit note by id
+ note-edit <id> <new_text>\t\t# edit note by id
  note-delete <id>\t\t\t# delete note by id
 - leave - 
  exit | close \t\t\t\t# exit from assistant
@@ -58,6 +58,7 @@ def card_add(args, book: AddressBook):
     record = Record(name)
     record.phone_add(phone)
     book.add_record(record)
+    print(f"{const.COLOR_DONE}New contact card added")
 
 
 @input_error
@@ -73,6 +74,7 @@ def card_edit(args, book: AddressBook):
     name, old_phone, new_phone, *_ = args
     record = book.find(name)
     record.edit_phone(old_phone, new_phone)
+    print(f"{const.COLOR_DONE}Phone changed")
 
 
 @input_error
@@ -127,27 +129,29 @@ def birthday_in(args, book: AddressBook):
 
 
 @input_error
-def add_note(args, notebook: NoteBook):
-    text_note = " ".join(args)
-    print(notebook.add_note(text_note))
+def add_note(notebook: NoteBook):
+    ID = notebook.add_note()
+    print(f"{const.COLOR_DONE}Note added with ID: {ID}")
 
 
 @input_error
 def note_delete(args, notebook: NoteBook):
     note_id, *_ = args
-    print(notebook.delete_note(note_id))
+    notebook.delete_note(note_id)
+    print(f"{const.COLOR_DONE}Note deleted")
 
 
 @input_error
 def note_edit(args, notebook: NoteBook):
     note_id = args[0]
     new_text = " ".join(args[1:])
-    print(notebook.edit_note(note_id, new_text))
+    notebook.edit_note(note_id, new_text)
+    print(f"{const.COLOR_DONE}Note updated successully")
 
 
 @input_error
 def note_show_all(notebook: NoteBook):
-    print(notebook.show_all_notes())
+    notebook.show_all_notes()
 
 
 @input_error
@@ -171,17 +175,6 @@ def load_data(filename="addressbook.pkl"):
     except FileNotFoundError:
         print(f"{const.COLOR_ERROR}Local address book was NOT found. Empty created")
         return AddressBook()
-
-
-@input_error
-def load_data_note(filename="notebook.pkl"):
-    try:
-        with open(filename, "rb") as f:
-            print(f"{const.COLOR_DONE}Local note book was found and loaded")
-            return pickle.load(f)
-    except FileNotFoundError:
-        print(f"{const.COLOR_ERROR}Local note book was NOT found. Empty created")
-        return NoteBook()
 
 
 @input_error
@@ -262,7 +255,7 @@ def main():
 
         elif command == "note-add":
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
-            add_note(args, notebook)
+            add_note(notebook)
 
         elif command == "note-show-all":
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")

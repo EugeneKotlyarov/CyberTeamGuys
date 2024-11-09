@@ -1,5 +1,6 @@
 from typing import Optional, List, Dict
 
+
 class Note:
     id: int
     text: str
@@ -12,9 +13,8 @@ class Note:
 
     def _extract_tags(self, tags: str) -> List[str]:
         if tags:
-            return [tag[1:] for tag in tags.split() if tag.startswith('#')]
-        return "No tag"
-
+            return [tag[1:] for tag in tags.split() if tag.startswith("#")]
+        return ["No tag"]
 
     def add_tag(self, tags):
         if tags not in self.tags:

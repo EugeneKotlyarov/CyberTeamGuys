@@ -40,11 +40,17 @@ def input_error(func):
                     print(f"{const.COLOR_ERROR}Contact was not found")
                 case "birthday_show":
                     print(f"{const.COLOR_ERROR}Contact was not found")
+                case "note_delete":
+                    print(f"{const.COLOR_ERROR}Note was not found")
+                case "note_edit":
+                    print(f"{const.COLOR_ERROR}Note was not found")
+
 
         except AttributeError:
             match func.__name__:
                 case "birthday_in":
                     print(f"{const.COLOR_ERROR}No one record has a birthday value")
+
 
         except AlreadyExistsError:
             print(
