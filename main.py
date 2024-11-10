@@ -1,24 +1,21 @@
-# local project import
+# Local project imports
+from modules import const                    # Constants used in the program
+from modules.errors import input_error       # Custom error handling for user input
 
-from modules import const
-from modules.errors import input_error
+from classes.record import Record            # Class for handling individual contact records
+from classes.addressbook import AddressBook  # Class for handling the address book
 
-from classes.record import Record
-from classes.addressbook import AddressBook
+# Global imports
+import pickle                                # For serialization of data
+import os                                    # For operating system dependent functionality
+import platform                              # To check the operating system type
 
-# global import
+from colorama import Style                   # For colored terminal output
+from subprocess import call                  # For running system commands
 
-import pickle
-import os
-import platform
+from classes.notebook import NoteBook        # Class for handling notes
 
-from colorama import Style
-from subprocess import call
-
-from classes.record import Record
-from classes.addressbook import AddressBook
-from classes.notebook import NoteBook
-
+# Command menu for the assistant bot
 COMMANDS_MENU = f"""
 Assistant bot's commands menu:
 - contact -
@@ -44,185 +41,160 @@ Assistant bot's commands menu:
  exit | close \t\t\t\t# exit from assistant
 """
 
-
-# ===== parse user input into command and parameters
+# ===== Parse user input into command and parameters =====
 def parse_input(user_input):
-    cmd, *args = user_input.split()
-    cmd = cmd.strip().lower()
-    return cmd, *args
-
+    cmd, *args = user_input.split()  # Split the input into command and arguments
+    cmd = cmd.strip().lower()        # Normalize the command (lowercase and stripped of whitespace)
+    return cmd, *args                # Return command and arguments
 
 # ===== BLOCK FOR CALLING FUNCTIONS FROM MAIN ===== START
 
-
-@input_error
+@input_error  # Decorator for error handling
 def card_add(args, book: AddressBook):
-    name, phone, *_ = args
-    record = Record(name)
-    record.phone_add(phone)
-    book.add_record(record)
-    print(f"{const.COLOR_DONE}New contact card added")
-
+    name, phone, *_ = args                              # Extract name and phone from arguments
+    record = Record(name)                               # Create a new Record object
+    record.phone_add(phone)                             # Add the phone number to the record
+    book.add_record(record)                             # Add the record to the address book
+    print(f"{const.COLOR_DONE}New contact card added")  # Confirmation message
 
 @input_error
 def card_add_phone(args, book: AddressBook):
-    name, phone, *_ = args
-    record = book.find(name)
-    record.phone_add(phone)
-    print(f"{const.COLOR_DONE}Phone added")
-
+    name, phone, *_ = args                              # Extract name and phone from arguments
+    record = book.find(name)                            # Find the record by name
+    record.phone_add(phone)                             # Add the new phone number
+    print(f"{const.COLOR_DONE}Phone added")             # Confirmation message
 
 @input_error
 def card_edit(args, book: AddressBook):
-    name, old_phone, new_phone, *_ = args
-    record = book.find(name)
-    record.edit_phone(old_phone, new_phone)
-    print(f"{const.COLOR_DONE}Phone changed")
-
+    name, old_phone, new_phone, *_ = args               # Extract necessary arguments
+    record = book.find(name)                            # Find the record by name
+    record.edit_phone(old_phone, new_phone)             # Edit the phone number
+    print(f"{const.COLOR_DONE}Phone changed")           # Confirmation message
 
 @input_error
 def card_find(args, book: AddressBook):
-    name, *_ = args
-    record = book.find(name)
-    print(record)
-
+    name, *_ = args                                     # Extract the name argument
+    record = book.find(name)                            # Find the record
+    print(record)                                       # Print the contact's information
 
 @input_error
 def card_delete(args, book: AddressBook):
-    name, *_ = args
-    record = book.delete(name)
-
+    name, *_ = args                                     # Extract the name argument
+    record = book.delete(name)                          # Delete the record
 
 @input_error
 def all(book: AddressBook):
-    book.all()
-
+    book.all()                                          # Show all contacts in the address book
 
 @input_error
 def email_add(args, book: AddressBook):
-    name, email, *_ = args
-    record = book.find(name)
-    record.email_add(email)
-    print(f"{const.COLOR_DONE}E-mail added")
-
+    name, email, *_ = args                              # Extract name and email
+    record = book.find(name)                            # Find the record by name
+    record.email_add(email)                             # Add the email to the record
+    print(f"{const.COLOR_DONE}E-mail added")            # Confirmation message
 
 @input_error
 def birthday_add(args, book: AddressBook):
-    name, birthday, *_ = args
-    record = book.find(name)
-    record.birthday_add(birthday)
-    print(f"{const.COLOR_DONE}Birthday added")
-
+    name, birthday, *_ = args                           # Extract name and birthday
+    record = book.find(name)                            # Find the record by name
+    record.birthday_add(birthday)                       # Add the birthday to the record
+    print(f"{const.COLOR_DONE}Birthday added")          # Confirmation message
 
 @input_error
 def birthday_show(args, book: AddressBook):
-    name, *_ = args
-    record = book.find(name)
-    if record.birthday == None:
-        print(f"{const.COLOR_ERROR}{name}'s birthday date does not set")
+    name, *_ = args                                                         # Extract the name argument
+    record = book.find(name)                                                # Find the record
+    if record.birthday is None:                                             # Check if birthday is set
+        print(f"{const.COLOR_ERROR}{name}'s birthday date does not set")    # Error message
     else:
-        print(f"{const.COLOR_DONE}{name}'s birthday is {record.birthday}")
-
+        print(f"{const.COLOR_DONE}{name}'s birthday is {record.birthday}")  # Show birthday
 
 @input_error
 def birthday_in(args, book: AddressBook):
-    days, *_ = args
-    book.get_upcoming_birthdays(int(days))
-
+    days, *_ = args                                     # Extract the number of days
+    book.get_upcoming_birthdays(int(days))              # Show upcoming birthdays
 
 @input_error
 def add_note(notebook: NoteBook):
-    ID = notebook.add_note()
-    print(f"{const.COLOR_DONE}Note added with ID: {ID}")
-
+    ID = notebook.add_note()                                # Add a note and get its ID
+    print(f"{const.COLOR_DONE}Note added with ID: {ID}")    # Confirmation message
 
 @input_error
 def note_delete(args, notebook: NoteBook):
-    note_id, *_ = args
-    notebook.delete_note(note_id)
-    print(f"{const.COLOR_DONE}Note deleted")
-
+    note_id, *_ = args                                  # Extract the note ID
+    notebook.delete_note(note_id)                       # Delete the note
+    print(f"{const.COLOR_DONE}Note deleted")            # Confirmation message
 
 @input_error
 def note_edit(args, notebook: NoteBook):
-    note_id = args[0]
-    new_text = " ".join(args[1:])
-    notebook.edit_note(note_id, new_text)
-    print(f"{const.COLOR_DONE}Note updated successully")
-
+    note_id = args[0]                                       # Extract the note ID
+    new_text = " ".join(args[1:])                           # Combine the rest of the arguments into new text
+    notebook.edit_note(note_id, new_text)                   # Edit the note
+    print(f"{const.COLOR_DONE}Note updated successfully")   # Confirmation message
 
 @input_error
 def note_show_all(notebook: NoteBook):
-    notebook.show_all_notes()
-
+    notebook.show_all_notes()                           # Show all notes
 
 # ===== BLOCK FOR CALLING FUNCTIONS FROM MAIN ===== END
 
 # ===== BLOCK FOR SAVE AND RESTORE DATA ===== START
 
-
 @input_error
 def save_data(book: AddressBook, filename="addressbook.pkl"):
-    with open(filename, "wb") as f:
-        pickle.dump(book, f)
-
+    with open(filename, "wb") as f:                     # Open file to write binary data
+        pickle.dump(book, f)                            # Serialize and save the address book
 
 @input_error
 def save_data_note(notebook: NoteBook, filename="notebook.pkl"):
-    with open(filename, "wb") as f:
-        pickle.dump(notebook, f)
-
+    with open(filename, "wb") as f:                     # Open file to write binary data
+        pickle.dump(notebook, f)                        # Serialize and save the notebook
 
 @input_error
 def load_data(filename="addressbook.pkl"):
     try:
-        with open(filename, "rb") as f:
-            print(f"{const.COLOR_DONE}Local address book was found and loaded")
-            return pickle.load(f)
+        with open(filename, "rb") as f:                                                 # Try to open the file for reading
+            print(f"{const.COLOR_DONE}Local address book was found and loaded")         # Success message
+            return pickle.load(f)                                                       # Deserialize and return the address book
     except FileNotFoundError:
-        print(f"{const.COLOR_ERROR}Local address book was NOT found. Empty created")
-        return AddressBook()
-
+        print(f"{const.COLOR_ERROR}Local address book was NOT found. Empty created")    # Error message
+        return AddressBook()                                                            # Return a new empty address book
 
 @input_error
 def load_data_note(filename="notebook.pkl"):
     try:
-        with open(filename, "rb") as f:
-            print(f"{const.COLOR_DONE}Local note book was found and loaded")
-            return pickle.load(f)
+        with open(filename, "rb") as f:                                             # Try to open the file for reading
+            print(f"{const.COLOR_DONE}Local note book was found and loaded")        # Success message
+            return pickle.load(f)                                                   # Deserialize and return the notebook
     except FileNotFoundError:
-        print(f"{const.COLOR_ERROR}Local note book was NOT found. Empty created")
-        return NoteBook()
-
+        print(f"{const.COLOR_ERROR}Local note book was NOT found. Empty created")   # Error message
+        return NoteBook()                                                           # Return a new empty notebook
 
 # ===== BLOCK FOR SAVE AND RESTORE DATA ===== END
 
-
-# check and make call for specific operating system
+# Check the operating system and clear the console accordingly
 def clear():
     os.system("cls" if platform.system() == "Windows" else "clear")
 
-
 # ===== MAIN ===== START
 def main():
-    clear()
-    # Створення нової адресної книги або через відновлення
-    book = load_data()
-    # Створення нового записника або через відновлення
-    notebook = load_data_note()
-    print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
+    clear()                                      # Clear the console
+    book = load_data()                           # Load or create a new address book
+    notebook = load_data_note()                  # Load or create a new notebook
+    print(f"{const.COLOR_MENU}{COMMANDS_MENU}")  # Display the command menu
 
     while True:
-        user_input = input(f"{const.COLOR_MENU}Enter a command ('menu' for menu): ")
-        command, *args = parse_input(user_input)
-        clear()
+        user_input = input(f"{const.COLOR_MENU}Enter a command ('menu' for menu): ")    # Prompt for user input
+        command, *args = parse_input(user_input)                                        # Parse the input
+        clear()  # Clear the console
 
-        if command in ["close", "exit"]:
-            print(f"{const.COLOR_DONE}\nGood bye!")
-            save_data(book)
-            save_data_note(notebook)
-            break
+        if command in ["close", "exit"]:                # Check for exit commands
+            print(f"{const.COLOR_DONE}\nGood bye!")     # Farewell message
+            save_data(book)                             # Save the address book
+            save_data_note(notebook)                    # Save the notebook
+            break                                       # Exit the loop
 
+        # Command handling for various actions
         elif command == "card-add":
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
             card_add(args, book)
@@ -281,12 +253,10 @@ def main():
 
         else:
             print(f"{const.COLOR_MENU}{COMMANDS_MENU}")
-            print(f"{const.COLOR_ERROR}Invalid command")
-
+            print(f"{const.COLOR_ERROR}Invalid command")    # Error message for invalid commands
 
 # ===== MAIN ===== END
 
 # ===== ENTRANCE POINT =====
-
 if __name__ == "__main__":
-    main()
+    main()                      # Run the main function
